@@ -1,0 +1,16 @@
+name: serializable_core
+version: 0.8.1
+description: generates a serializable class from classes using `source_gen` package
+author: Luis Vargas <luisvargastijerino@gmail.com>
+homepage: https://github.com/dart-league/serializable_core
+
+environment:
+  sdk: '>=1.8.0 <2.0.0'
+
+dependencies:
+  analyzer: ^0.31.0
+  build: ^0.12.0
+  source_gen: ^0.7.0
+  built_mirrors_core: ^0.8.2
+#  built_mirrors_core:
+#    path: ../built_mirrors_core
