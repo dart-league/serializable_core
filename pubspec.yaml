@@ -1,5 +1,5 @@
 name: serializable_core
-version: 0.8.1
+version: 0.9.0
 description: generates a serializable class from classes using `source_gen` package
 author: Luis Vargas <luisvargastijerino@gmail.com>
 homepage: https://github.com/dart-league/serializable_core

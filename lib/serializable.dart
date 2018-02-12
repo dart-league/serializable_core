@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:built_mirrors_core/built_mirrors.dart';
 export 'package:built_mirrors_core/built_mirrors.dart';
 
@@ -73,6 +75,49 @@ abstract class SerializableMap implements Map {
 
   /// return the attributes values
   Iterable get values => keys.map((key) => this[key]);
+
+  @override
+  void addEntries(Iterable<MapEntry> newEntries) {
+    // TODO: implement addEntries
+  }
+
+  @override
+  Map<RK, RV> cast<RK, RV>() {
+    return null;
+  }
+
+  // TODO: implement entries
+  @override
+  Iterable<MapEntry> get entries => null;
+
+  // TODO: implement keys
+  @override
+  Iterable get keys => null;
+
+  @override
+  Map<K2, V2> map<K2, V2>(MapEntry<K2, V2> Function(dynamic key, dynamic value) f) {
+    return null;
+  }
+
+  @override
+  void removeWhere(predicate) {
+    // TODO: implement removeWhere
+  }
+
+  @override
+  Map<RK, RV> retype<RK, RV>() {
+    return null;
+  }
+
+  @override
+  update(key, update, {dynamic Function() ifAbsent}) {
+    // TODO: implement update
+  }
+
+  @override
+  void updateAll(update) {
+    // TODO: implement updateAll
+  }
 }
 
 class FieldNotFoundException implements Exception {

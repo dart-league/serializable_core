@@ -1,2 +1,2 @@
 # serializable_core
-Core libraries of `built_mirrors`
+Core libraries of [serializable](https://pub.dartlang.org/packages/serializable)
