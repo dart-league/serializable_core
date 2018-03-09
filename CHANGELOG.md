@@ -1,3 +1,7 @@
+## 0.9.1+1
+
+- return empty string if the element passed to the generator is not ClassElement
+
 ## 0.9.1
 
 - add generics support

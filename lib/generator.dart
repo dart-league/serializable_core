@@ -15,6 +15,8 @@ class SerializableGenerator extends GeneratorForAnnotation<Serializable> {
 
   @override
   Future<String> generateForAnnotatedElement(covariant ClassElement element, ConstantReader cr, BuildStep buildStep) async {
+    if (element is! ClassElement) return '';
+
     var superTypes = element.allSupertypes.where((st) => st.element.name != 'Object');
     var stAccessors = superTypes.expand((st) => st.accessors);
     var stMethods = superTypes.expand((st) => st.methods);
