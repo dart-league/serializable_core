@@ -1,3 +1,7 @@
+## 0.9.2
+
+- upgrade `sourgen` to `^0.8.0`
+
 ## 0.9.1+1
 
 - return empty string if the element passed to the generator is not ClassElement
