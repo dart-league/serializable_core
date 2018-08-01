@@ -105,11 +105,6 @@ abstract class SerializableMap implements Map {
   }
 
   @override
-  Map<RK, RV> retype<RK, RV>() {
-    return null;
-  }
-
-  @override
   update(key, update, {dynamic Function() ifAbsent}) {
     // TODO: implement update
   }
