@@ -1,3 +1,7 @@
+# 0.10.0
+
+- upgrade `source_gen` to version `^0.9.0`
+
 ## 0.9.3
 
 - upgrade `analyzer` to version `^0.32.0`
