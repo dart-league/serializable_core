@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:built_mirrors_core/built_mirrors.dart';
+
 export 'package:built_mirrors_core/built_mirrors.dart';
 
 /// Shorthand annotation of [Serializable] used to determine which classes will
@@ -23,7 +24,7 @@ abstract class SerializableMap implements Map {
   }
 
   /// Add all the values the the [map] into the current object. Is the same as [addAll]
-  fromMap(Map map) => addAll(map);
+  void fromMap(Map map) => addAll(map);
 
   /// Create a [Map] from the values of the object.
   Map toMap() => new Map.from(this);
@@ -52,8 +53,7 @@ abstract class SerializableMap implements Map {
 
   /// does nothing
   @override
-  putIfAbsent(key, ifAbsent()) {
-  }
+  putIfAbsent(key, ifAbsent()) {}
 
   /// Sets the [attribute] value to null
   @override
@@ -118,9 +118,97 @@ abstract class SerializableMap implements Map {
 class FieldNotFoundException implements Exception {
   final String type;
   final String key;
+
   FieldNotFoundException([this.key, this.type]);
 
   toString() => "FieldNotFoundException: The key \"$key\" doesn't exist on class \"$type\"";
 }
 
 throwFieldNotFoundException(String key, String type) => throw new FieldNotFoundException(key, type);
+
+/// Converts the [serialized] value into its respective complex object value depending on the result of the factory
+/// function.
+///
+/// example:
+///
+///     fromSerialized({'id': 1, 'name': 'Jhon'}, () => new Person());
+///
+///     fromSerialized([{'id': 1, 'name': 'Jhon'}], [() => new List<Person>(), () => new Person()]);
+///
+///     fromSerialized({'items': [{'id': 1, 'name': 'Jhon'}]},
+///                    [() => new Map<String, List<Person>>(), [() => new List<Person>(), () => new Person()]);
+fromSerialized(serialized, /*Function | List<Function | List<Function | ...>>*/ factory) {
+  if (serialized == null) {
+    return serialized;
+  } else if (serialized is List) {
+    return _fromSerializedIterable(serialized, factory);
+  } else if (serialized is Set) {
+    return _fromSerializedIterable(serialized, factory);
+  } else if (serialized is Map) {
+    return _fromSerializedMap(serialized, factory);
+  }
+}
+
+Map _fromSerializedMap(Map serializedMap, /*Function | List<Function | List<Function | ...>>*/ factory) {
+  Map result;
+  if (factory is List) {
+    result = factory[0]();
+    serializedMap.forEach((key, value) {
+      result[key] = fromSerialized(value, factory[2]);
+    });
+  } else {
+    result = factory();
+    serializedMap.forEach((k, v) {
+      result[k] = v;
+    });
+  }
+  return result;
+}
+
+/*<List | Set>*/ _fromSerializedIterable(/*<List | Set>*/ serialized, /*Function | List<Function | List<Function | ...>>*/ factory) {
+  var result;
+  if (factory is List) {
+    result = factory[0]();
+    serialized.forEach((v) {
+      result.add(fromSerialized(v, factory[1]));
+    });
+  } else {
+    result = factory();
+    serialized.forEach((v) {
+      result.add(v);
+    });
+  }
+  return result;
+}
+
+/// Converts the [serialized] integer value into an enum in dependence of the factory result
+///
+/// Example:
+///
+///     enum Color {
+///       red,
+///       blue
+///     }
+///
+///     ...
+///
+///     fromSerializedEnum(0, Color, () => Color.values);  // returns `Color.red`
+///     fromSerializedEnum(1, Color, () => Color.values);  // returns `Color.blue`
+///     fromSerializedEnum(null, Color, () => Color.values);  // returns `null`
+///     fromSerializedEnum(Color.blue, Color, () => Color.values);  // returns `Color.blue`
+fromSerializedEnum(int serialized, Type type, Function factory) {
+  return serialized == null || serialized.runtimeType == type ? serialized : factory()[serialized];
+}
+
+/// Converts the [serialized] integer or ISO formatted String into a Datetime value
+///
+/// example:
+///     fromSerializedDateTime(1533343671) // returns a DateTime object for `2018-08-04T00:47:51-0000`
+///     fromSerializedDateTime('2002-02-27T14:00:00-0500') // returns DateTime Object form `2002-02-27T14:00:00-0500`
+fromSerializedDateTime(serialized) {
+  return serialized is num
+      ? new DateTime.fromMillisecondsSinceEpoch(serialized)
+      : serialized is String
+        ? DateTime.parse(serialized)
+        : serialized;
+}
