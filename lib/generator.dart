@@ -39,7 +39,7 @@ class SerializableGenerator extends GeneratorForAnnotation<Serializable> {
     return '''abstract class _\$${className}Serializable${typeGenerics.isNotEmpty ? '<' + typeGenerics.map((x) => x.type.name).join(',') + '>' : ''} extends SerializableMap {
   ${element.constructors.where((c) => c.isConst).map((c) => 'const _\$${className}Serializable${c.name.isNotEmpty ? '.' + c.name : ''}();').join('\n')}
   ${getters.map((g) => '${g.returnType} get ${g.name};').join('\n')}
-  ${setters.map((s) => 'void set ${s.displayName}(${s.type.normalParameterTypes[0]} v);').join('\n')}
+  ${setters.map((s) => 'set ${s.displayName}(${s.type.normalParameterTypes[0]} v);').join('\n')}
   ${methods.map((m) => '${m.returnType} ${m.name}(${_renderParameters(m.parameters)});').join('\n')}
 
   operator [](Object __key) {

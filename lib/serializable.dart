@@ -17,6 +17,29 @@ class Serializable extends Reflectable {
 abstract class SerializableMap implements Map {
   const SerializableMap();
 
+  /// Returns the field names of the Object
+  @override
+  Iterable get keys => null;
+
+  // TODO: implement entries
+  @override
+  Iterable<MapEntry> get entries => null;
+
+  /// check if the object [keys] is empty
+  @override
+  bool get isEmpty => keys.isEmpty;
+
+  /// check if the object [keys] is empty
+  @override
+  bool get isNotEmpty => !isEmpty;
+
+  /// return the length of [keys]
+  @override
+  int get length => keys.length;
+
+  /// return the attributes values
+  Iterable get values => keys.map((key) => this[key]);
+
   /// Add all the values the the [map] into the object.
   @override
   void addAll(Map map) {
@@ -61,21 +84,6 @@ abstract class SerializableMap implements Map {
     this[attribute] = null;
   }
 
-  /// check if the object [keys] is empty
-  @override
-  bool get isEmpty => keys.isEmpty;
-
-  /// check if the object [keys] is empty
-  @override
-  bool get isNotEmpty => !isEmpty;
-
-  /// return the length of [keys]
-  @override
-  int get length => keys.length;
-
-  /// return the attributes values
-  Iterable get values => keys.map((key) => this[key]);
-
   @override
   void addEntries(Iterable<MapEntry> newEntries) {
     // TODO: implement addEntries
@@ -85,14 +93,6 @@ abstract class SerializableMap implements Map {
   Map<RK, RV> cast<RK, RV>() {
     return null;
   }
-
-  // TODO: implement entries
-  @override
-  Iterable<MapEntry> get entries => null;
-
-  // TODO: implement keys
-  @override
-  Iterable get keys => null;
 
   @override
   Map<K2, V2> map<K2, V2>(MapEntry<K2, V2> Function(dynamic key, dynamic value) f) {
