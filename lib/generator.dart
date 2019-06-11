@@ -77,11 +77,11 @@ List<T> _distinctByName<T extends Element>(Iterable<T> elements) {
 
 String _renderParameters(List<ParameterElement> parameters) {
   var aux = [];
-  var requiredParams = parameters.where((p) => p.isNotOptional).map((p) => p.computeNode()).join(',');
+  var requiredParams = parameters.where((p) => p.isNotOptional).map((p) => p.toString()).join(',');
   if (requiredParams.isNotEmpty) aux.add(requiredParams);
-  var positionalParams = parameters.where((p) => p.isOptionalPositional).map((p) => p.computeNode()).join(',');
+  var positionalParams = parameters.where((p) => p.isOptionalPositional).map((p) => p.toString()).join(',');
   if (positionalParams.isNotEmpty) aux.add('[$positionalParams]');
-  var namedParams = parameters.where((p) => p.isNamed).map((p) => p.computeNode()).join(',');
+  var namedParams = parameters.where((p) => p.isNamed).map((p) => p.toString()).join(',');
   if (namedParams.isNotEmpty) aux.add('{$namedParams}');
   return aux.join(',');
 }
@@ -144,7 +144,7 @@ String _renderConstructorParameters(DartType setterType) {
 
 String _getSerializedNameFromField(FieldElement f) {
   return f.metadata
-          .firstWhere((a) => (a.constantValue.type.element as ClassElement).name == 'SerializedName',
+          .firstWhere((a) => (a.computeConstantValue().type.element as ClassElement).name == 'SerializedName',
               orElse: () => null)
           ?.constantValue
           ?.getField('name')
